@@ -5,6 +5,12 @@ on:
     branches:
       - main  # ou master, dependendo da sua branch principal
 
+# Configuração explícita de permissões para o GITHUB_TOKEN
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -14,13 +20,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Configuração do GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
       - name: Deploy para GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: .  # A pasta raiz contendo seu site HTML
           branch: gh-pages  # A branch onde o site será publicado
           clean: true  # Remove arquivos antigos
-          token: ${{ secrets.GITHUB_TOKEN }}  # Token de autenticação
+          # Sem especificar o token, ele usará o GITHUB_TOKEN padrão com as permissões definidas acima
 
       - name: Status do deploy
         run: echo "Site implantado com sucesso em https://$(echo ${{ github.repository_owner }}).github.io/design-for-failure/"
