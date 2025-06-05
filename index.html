@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design for Failure - Padrões de Resiliência</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
+    <style>
+        .profile-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            margin-right: 40px;
+            object-fit: cover;
+        }
+
+        .profile-info ul {
+            text-align: left;
+            font-size: 0.8em;
+        }
+        
+        .about-me h2 {
+            font-size: 1.4em;
+        }
+        
+        .concept-slide h2 {
+            font-size: 1.4em;
+        }
+        
+        /* Estilização para os blocos de código */
+        pre {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            margin: 0.5em auto !important;
+            max-width: 90%;
+            background-color: #f8f8f8 !important;
+        }
+        
+        pre code {
+            font-size: 1.2em !important;
+            line-height: 1.4 !important;
+            padding: 20px !important;
+        }
+        
+        .reveal pre code.hljs {
+            padding: 20px !important;
+        }
+        
+        .hljs-ln-highlighted {
+            background-color: rgba(255, 255, 0, 0.2) !important;
+            font-weight: bold !important;
+        }
+        
+        /* Melhoria para o código destacado */
+        .line-highlight {
+            background: rgba(255, 255, 0, 0.2) !important;
+            border-left: 3px solid #ff9800 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h1>Design for Failure</h1>
+                <h3>Padrões de Resiliência</h3>
+                <p>Luiz Schons</p>
+            </section>
+
+            <section class="about-me">
+                <h2>Quem sou eu?</h2>
+                <div class="profile-container">
+                    <img class="profile-image" src="76.jpg" alt="Luiz Schons">
+                    <div class="profile-info">
+                        <ul>
+                            <li>Luiz Schons</li>
+                            <li>Senior Software Architect/Engineer @ Vivaworks</li>
+                            <li>Canionista / Montanhista</li>
+                            <li>Atleta de CA</li>
+                            <li>BJJ</li>
+                            <li>DevParaná</li>
+                            <li>UTFPR</li>
+                            <li>schons.hashnode.dev</li>
+                            <li>Polyglot.ai & Golazzo</li>
+                            <li>Uma curiosidade…</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Disclaimer</h2>
+                <ul>
+                    <li>Não sou especialista em nada</li>
+                    <li>Analise o cenário que você está</li>
+                    <li>Não existe bala de prata</li>
+                    <li>Estude e estude…</li>
+                </ul>
+            </section>
+
+            <section class="concept-slide">
+                <h2>Como assim "Design for Failure"?</h2>
+                <p>Projetar sistemas assumindo que falhas vão acontecer, não tentando evitá-las.</p>
+            </section>
+
+            <section class="concept-slide">
+                <h2>Mas perai, sistemas falham?</h2>
+                <p>Sim, e por diversos motivos - software, hardware, rede ou fatores externos.</p>
+            </section>
+
+            <section class="concept-slide">
+                <p>Devemos construir sistemas resilientes que continuem funcionando mesmo quando falhas ocorrem.</p>
+            </section>
+
+            <section>
+                <h2>Vamos colocar isso na prática</h2>
+            </section>
+
+            <section>
+                <h3>A ideia revolucionária</h3>
+                <p>Você tem uma ideia brilhante para um e-commerce que vai mudar o mundo.</p>
+            </section>
+
+            <section>
+                <h3>O início modesto</h3>
+                <ul>
+                    <li>Um computador antigo como servidor</li>
+                    <li>Instalação de servidor web e banco de dados</li>
+                    <li>Início do desenvolvimento do site</li>
+                </ul>
+                <p><small>Quem nunca começou assim? 😅</small></p>
+            </section>
+
+            <section>
+                <h3>Seu super servidor</h3>
+                <ul>
+                    <li>4GB de RAM</li>
+                    <li>Processador dual-core</li>
+                    <li>HD de 500GB</li>
+                    <li>Sistema operacional + Servidor web + Banco de dados</li>
+                </ul>
+                <p><small>Parece até datacenter, não é mesmo? 🤣</small></p>
+            </section>
+
+            <section>
+                <img src="image-2.png" alt="Aplicação monolítica com poucos usuários" width="500">
+                <p>Você ainda tem poucos usuários, então tudo funciona bem.</p>
+            </section>
+
+            <section data-background-color="#ffffff">
+                <img src="image-4.png" alt="Diagrama de sistema" width="900" style="max-height: 80vh;">
+            </section>
+
+            <section>
+                <h3>O sucesso traz novos desafios</h3>
+                <p>Com o aumento de usuários, seu servidor local começa a mostrar sinais de sobrecarga.</p>
+                <img src="image-3.png" alt="Servidor com sobrecarga de usuários" width="600">
+            </section>
+
+            <section>
+                <h3>Meu Deus, o que fazer?</h3>
+                <p>É hora de repensar a infraestrutura: escalar para suportar mais usuários e garantir a 
+                   continuidade do serviço quando falhas ocorrerem.</p>
+            </section>
+
+            <section>
+                <h3>A Solução: Hardware mais potente</h3>
+                <p>Investimento em um servidor dedicado com mais recursos computacionais.</p>
+                <img src="image-5.png" alt="Servidor mais potente" width="800" style="max-height: 60vh;">
+            </section>
+
+            <section>
+                <h2>Pronto!</h2> 
+                <h3>Agora você tem um servidor potente e uma conta para pagar.</h3>
+            </section>
+
+            <section>
+                <h3>A solução funciona...</h3> 
+                <h5>por enquanto</h5>
+                <p>Mas você esqueceu de um "pequeno" detalhe: servidores precisam de manutenção constante.</p>
+                <p><small>E você não tem uma equipe de infraestrutura...</small></p>
+            </section>
+
+            <section>
+                <h3>Super-herói da infra</h3>
+                <ul>
+                    <li>Instalação de atualizações de segurança</li>
+                    <li>Monitoramento de recursos</li>
+                    <li>Resolução de problemas técnicos</li>
+                    <li>Manutenção do banco de dados</li>
+                </ul>
+                <p><small>Ah, e no tempo livre... desenvolver o seu e-commerce! 😰</small></p>
+            </section>
+
+            <section>
+                <h3>Os pesadelos te assombram</h3>
+                <ul>
+                    <li>E se o servidor parar de funcionar?</li>
+                    <li>E se ocorrer uma queda de energia?</li>
+                    <li>E se o disco rígido falhar?</li>
+                </ul>
+                <p>Meu negócio pode suportar esse risco?</p>
+            </section>
+
+            <section>
+                <h2>E agora?</h2>
+                <p class="fragment">Um único servidor não é suficiente...</p>
+                <p class="fragment">Precisamos de uma estratégia melhor!</p>
+            </section>
+
+            <section>
+                <h3>Hora de escalar com alta disponibilidade</h3>
+                <p>O próximo passo: múltiplos servidores para eliminar pontos únicos de falha e garantir que seu e-commerce esteja sempre disponível.</p>
+            </section>
+
+            <section data-background-color="#ffffff">
+                <img src="image-6.png" alt="Infraestrutura de alta disponibilidade" width="900" style="max-height: 80vh;">
+            </section>
+
+            <section>
+                <h3>Arquitetura de Alta Disponibilidade</h3>
+                <p>Infraestrutura robusta com servidor principal, backup e banco de dados separado — tudo configurado para continuar funcionando mesmo quando um componente falha.</p>
+                <img src="image-6.png" alt="Infraestrutura de alta disponibilidade" width="600">
+            </section>
+
+            <section>
+                <h3>Seu datacenter caseiro tem um problema</h3>
+                <ul>
+                    <li>Falta de monitoramento 24/7</li>
+                    <li>Vulnerabilidade a desastres físicos (incêndio, inundação)</li>
+                    <li>Riscos de segurança (roubo, invasão)</li>
+                </ul>
+                <p><small>Sua sala não foi projetada para ser um datacenter profissional...</small></p>
+            </section>
+
+            <section>
+                <h3>O custo oculto da "economia"</h3>
+                <ul>
+                    <li>Investimento crescente em hardware</li>
+                    <li>Horas intermináveis de manutenção</li>
+                    <li>Tempo precioso desviado do seu negócio principal</li>
+                    <li>Estresse constante com a infraestrutura</li>
+                </ul>
+                <p class="fragment">O barato sai caro... muito caro!</p>
+            </section>
+
+            <section>
+                <h2>Precisamos de algo melhor</h2>
+                <p>Uma solução que:</p>
+                <ul>
+                    <li>Escale automaticamente conforme a demanda</li>
+                    <li>Ofereça alta disponibilidade sem dores de cabeça</li>
+                    <li>Permita foco no desenvolvimento do seu negócio</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>E qual seria a solução?</h2>
+                <p class="fragment">Alguém tem alguma ideia?</p>
+                <div class="fragment">
+                    <p>Quais opções temos hoje para:</p>
+                    <ul>
+                        <li>Escalar facilmente</li>
+                        <li>Reduzir manutenção</li>
+                        <li>Aumentar disponibilidade</li>
+                        <li>Focar no negócio</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h3>A resposta: </h3>
+                <h2>Cloud Computing</h2>
+                <p>Migração da infraestrutura para provedores especializados em nuvem que oferecem:</p>
+                <ul class="fragment">
+                    <li>Infraestrutura como serviço</li>
+                    <li>Escalabilidade sob demanda</li>
+                    <li>Alta disponibilidade com garantias por contrato</li>
+                    <li>Redução de responsabilidades operacionais</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Docker</h3>
+                <ul>
+                    <li>Encapsula aplicações</li>
+                    <li>Portabilidade total</li>
+                    <li>Deploy simplificado</li>
+                    <li>Infraestrutura como código</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Curso gratuito de Docker</h3>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://www.youtube.com/playlist?list=PLNCSWIsR6ADKRq-XBvAcRd4XtqLj3f_mf" alt="QR Code para curso de Docker">
+                <p><small>Fernanda Kipper no YouTube</small></p>
+            </section>
+
+            <section data-background-color="#ffffff">
+                <img src="image-7.png" alt="Infraestrutura em nuvem" width="900" style="max-height: 80vh;">
+            </section>
+
+            <section>
+                <h3>Cloud: benefícios práticos</h3>
+                <ul>
+                    <li>Menos manutenção</li>
+                    <li>Escala automática</li>
+                    <li>Serviços gerenciados</li>
+                    <li>Backups automáticos</li>
+                </ul>
+                <p class="fragment"><em>Foco no negócio, não na infraestrutura</em></p>
+            </section>
+
+            <section data-background-color="#ffffff">
+                <div style="position: relative; width: 900px; height: 500px; margin: 0 auto;">
+                    <div class="fragment fade-out" data-fragment-index="0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+                        <img src="image-8.png" alt="Primeira imagem" style="max-width: 100%; max-height: 100%;">
+                    </div>
+                    <div class="fragment fade-in" data-fragment-index="0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+                        <img src="image-9.png" alt="Segunda imagem" style="max-width: 100%; max-height: 100%;">
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Kubernetes</h3>
+                <ul>
+                    <li>Orquestra containers</li>
+                    <li>Gerencia réplicas automaticamente</li>
+                    <li>Garante disponibilidade dos serviços</li>
+                </ul>
+                <p class="fragment">O caminho para a resiliência está apenas começando...</p>
+            </section>
+
+            <section>
+                <h2>Não estamos aqui para falar de infraestrutura</h2>
+                <p>Mas sim de como projetar sistemas que sobrevivam quando as coisas dão errado</p>
+                <p class="fragment"><em>Porque, acredite, elas sempre dão! 😅</em></p>
+            </section>
+
+            <section>
+                <h3>Voltando ao nosso e-commerce</h3>
+            </section>
+
+            <section data-background-color="#ffffff">
+                <img src="image-1.png" alt="Fluxo do e-commerce" width="800" style="max-height: 70vh;">
+            </section>
+
+            <section>
+                <h2>Quais problemas podem ocorrer neste fluxo?</h2>
+                <p>Pense em todos os pontos de falha possíveis...</p>
+            </section>
+
+            <section>
+                <h3>Problemas que podem ocorrer</h3>
+                <ul>
+                    <li class="fragment">Serviço de pagamento fora do ar</li>
+                    <li class="fragment">Serviço de calcular frete fora do ar</li>
+                    <li class="fragment">Ataque em algum endpoint do sistema</li>
+                    <li class="fragment">Complexidade ao adicionar mais um serviço</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Vamos entender esses problemas melhor</h2>
+                <p>E como podemos projetar nossas aplicações para lidar com eles</p>
+            </section>
+
+            <section>
+                <h2>Serviço de pagamento fora do ar</h2>
+            </section>
+
+            <section data-background-color="#ffffff">
+                <img src="image-10.png" alt="Imagem 10" width="1000" style="max-height: 90vh;">
+            </section>
+
+            <section data-background-color="#ffffff">
+                <img src="image-11.png" alt="Imagem 11" width="1000" style="max-height: 90vh;">
+            </section>
+
+            <section>
+                <h2>Como podemos lidar com isso?</h2>
+            </section>
+
+            <section>
+                <h2>Retry</h2>
+                <p>Tente novamente após uma falha, aumentando gradualmente o tempo de espera entre tentativas:</p>
+                <img src="image-12.png" alt="Padrão Retry" width="600" style="margin-top: 20px;">
+            </section>
+
+            <section>
+                <h2>Mas como que fazemos isso com código?</h2>
+            </section>
+
+            <section>
+                <h2>Conceitos universais, diferentes linguagens</h2>
+                <p>Os padrões de resiliência funcionam em qualquer linguagem de programação</p>
+                <p class="fragment">Vamos ver exemplos em duas plataformas diferentes:</p>
+            </section>
+
+            <section>
+                <div style="display: flex; justify-content: space-around; align-items: center;">
+                    <div style="text-align: center; margin: 0 20px;">
+                        <img src="https://hyperf.wiki/3.1/logo.png" alt="Hyperf Logo" height="150">
+                        <h3>PHP com Hyperf</h3>
+                    </div>
+                    <div style="text-align: center; margin: 0 20px;">
+                        <img src="https://nestjs.com/logo-small-gradient.d792062c.svg" alt="NestJS Logo" height="150">
+                        <h3>TypeScript com NestJS</h3>
+                    </div>
+                </div>
+                <p class="fragment" style="margin-top: 30px;"><em>Mesmo problema, mesmos conceitos, diferentes implementações</em></p>
+            </section>
+
+            <section>
+                <h3>Exemplo com PHP e Hyperf</h3>
+                <pre><code class="php" data-line-numbers="3,4|6|7,8,9,10,11,12,13">namespace App\Service;
+
+use Hyperf\Retry\Annotation\Retry;
+use Hyperf\Retry\RetryBudget;
+
+class PaymentService
+{
+    #[Retry(delay: 1000, maxAttempts: 3)]
+    public function processPayment()
+    {
+        // make a remote call
+    }
+}</code></pre>
+            </section>
+
+            <section>
+                <h3>Exemplo com TypeScript e NestJS</h3>
+                <pre><code class="typescript" data-line-numbers="2,3,4|7,8,9,10,11,12">import { Injectable } from '@nestjs/common';
+import { Retry } from '@nestjs/axios';
+import { catchError, delay, retryWhen } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+@Injectable()
+export class PaymentService {
+    @Retry({ delay: 1000, maxAttempts: 3 })
+    async processPayment() {
+        // make a remote call
+    }
+}</code></pre>
+            </section>
+
+            <section>
+                <h2>Mas o Retry tem um problema...</h2>
+                <p class="fragment">E se o serviço estiver completamente fora do ar?</p>
+                <p class="fragment">Vamos ficar tentando sem parar?</p>
+            </section>
+
+            <section>
+                <h2>Circuit Breaker</h2>
+                <p>Interrompe chamadas a serviços com falhas, prevenindo sobrecarga do sistema</p>
+                <img src="image-13.png" alt="Código com Circuit Breaker" width="600" style="margin-top: 20px;">
+            </section>
+
+            <section>
+                <h3>Como funciona?</h3>
+                <p>Inspirado nos disjuntores elétricos:</p>
+                <ul>
+                    <li class="fragment"><strong>Fechado (normal)</strong>: Permite as chamadas ao serviço</li>
+                    <li class="fragment"><strong>Aberto (falha)</strong>: Bloqueia chamadas após muitos erros</li>
+                    <li class="fragment"><strong>Semi-aberto</strong>: Permite algumas chamadas para testar recuperação</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Retry vs Circuit Breaker</h3>
+                <div style="display: flex; justify-content: space-around; text-align: left;">
+                    <div style="width: 45%;">
+                        <h4>Retry</h4>
+                        <ul>
+                            <li>Tenta novamente após falha</li>
+                            <li>Bom para falhas temporárias</li>
+                            <li>Pode sobrecarregar sistemas</li>
+                        </ul>
+                    </div>
+                    <div style="width: 45%;">
+                        <h4>Circuit Breaker</h4>
+                        <ul>
+                            <li>Evita chamadas a serviços falhos</li>
+                            <li>Bom para falhas persistentes</li>
+                            <li>Permite recuperação gradual</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="fragment">Funcionam melhor quando usados em conjunto!</p>
+            </section>
+
+            <section>
+                <h3>Implementação em PHP com Hyperf</h3>
+                <pre><code class="php" data-line-numbers="7|12,13,14,15,16,17,18|19,20,21,22|24,25,26,27">namespace App\Services;
+
+use App\Gateway\GatewayServiceClient;
+use Hyperf\CircuitBreaker\Annotation\CircuitBreaker;
+use Hyperf\Di\Annotation\Inject;
+
+class GatewayService
+{
+    #[Inject]
+    private GatewayServiceClient $client;
+
+    #[CircuitBreaker
+    (
+        options: ['timeout' => 5000], 
+        failCounter: 3, 
+        successCounter: 1,
+        fallback: 'processPaymentFallback'
+    )]
+    public function processPayment()
+    {
+        // make a remote call
+    }
+
+    public function processPaymentFallback()
+    {
+        return 'Service unavailable';
+    }
+}</code></pre>
+            </section>
+
+            <section>
+                <h3>Implementação em TypeScript com NestJS</h3>
+                <pre><code class="typescript" data-line-numbers="2|5,6,7,8,9|10,11,12">import { Injectable } from '@nestjs/common';
+import { CircuitBreaker } from '@nestjs/axios';
+
+@Injectable()
+export class PaymentService {
+    @CircuitBreaker({ 
+        timeout: 5000, 
+        fallback: () => 'Service unavailable' 
+    })
+    async processPayment() {
+        // make a remote call
+    }
+}</code></pre>
+            </section>
+
+            <section>
+                <h2>Vocês perceberam algum padrão?</h2>
+                <p class="fragment">Algo comum nas duas implementações...</p>
+            </section>
+
+            <section>
+                <h1>Fallbacks</h1>
+            </section>
+
+            <section>
+                <h2>O que são Fallbacks?</h2>
+                <ul>
+                    <li>Planos B para quando algo falha</li>
+                    <li>Podem ser simples mensagens ou lógicas alternativas complexas</li>
+                </ul>
+                <p class="fragment"><em>É como levar um guarda-chuva mesmo quando o céu está limpo</em> 🌂</p>
+            </section>
+
+            <section>
+                <h3>Fallback em PHP</h3>
+                <pre><code class="php" data-line-numbers="17|24,25,26,27">namespace App\Services;
+
+use App\Gateway\GatewayServiceClient;
+use Hyperf\CircuitBreaker\Annotation\CircuitBreaker;
+use Hyperf\Di\Annotation\Inject;
+
+class GatewayService
+{
+    #[Inject]
+    private GatewayServiceClient $client;
+
+    #[CircuitBreaker
+    (
+        options: ['timeout' => 5000], 
+        failCounter: 3, 
+        successCounter: 1,
+        fallback: 'processPaymentFallback'  // Nome do método de fallback
+    )]
+    public function processPayment()
+    {
+        // make a remote call
+    }
+
+    // Método executado quando um pedido é cancelado
+    public function processPaymentFallback()
+    {
+        return 'Service unavailable';
+    }
+}</code></pre>
+            </section>
+
+            <section>
+                <h3>Fallback em TypeScript</h3>
+                <pre><code class="typescript" data-line-numbers="8">import { Injectable } from '@nestjs/common';
+import { CircuitBreaker } from '@nestjs/axios';
+
+@Injectable()
+export class PaymentService {
+    @CircuitBreaker({ 
+        timeout: 5000, 
+        fallback: () => 'Service unavailable'  // Função inline de fallback
+    })
+    async processPayment() {
+        // make a remote call
+    }
+}</code></pre>
+            </section>
+
+            <section>
+                <h2>E quando temos múltiplos serviços?</h2>
+            </section>
+
+            <section>
+                <h2>Saga Pattern</h2>
+                <p>Gerencia transações distribuídas em sistemas complexos</p>
+            </section>
+
+            <section data-background-color="#ffffff">
+                <img src="image-14.png" alt="Saga Pattern" width="1000" style="max-height: 90vh;">
+            </section>
+
+            <section>
+                <h3>Saga Pattern + Fallbacks</h3>
+                <p>Transações robustas com recuperação em cada etapa</p>
+            </section>
+
+            <section>
+                <div style="display: flex; justify-content: space-around; text-align: left;">
+                    <div style="width: 50%;">
+                        <h4>Fallbacks</h4>
+                        <ul>
+                            <li>Plano B</li>
+                            <li>Resposta imediata</li>
+                        </ul>
+                    </div>
+                    <div style="width: 55%;">
+                        <h4>Saga</h4>
+                        <ul>
+                            <li>Transações distribuídas</li>
+                            <li>Compensação de erros</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Implementação de Compensações</h2>
+                <p>Quando algo falha, precisamos desfazer as operações anteriores</p>
+            </section>
+
+            <section>
+                <h3>Compensação em PHP com Hyperf</h3>
+                <pre><code class="php" data-line-numbers="4,5|9,10,11,12|14,15|19,20,21,22,23,24,25"><?php
+namespace App\Listener;
+
+use Hyperf\Event\Contract\ListenerInterface;
+use App\Event\OrderCancelled;
+
+class OrderCancelledListener implements ListenerInterface
+{
+    public function listen(): array
+    {
+        return [OrderCancelled::class];
+    }
+
+    // Método chamado quando um pedido é cancelado
+    public function process(object $event): void
+    {
+        // Extrai informações do evento
+        $orderId = $event->orderId;
+        
+        // Compensa as etapas anteriores (saga pattern)
+        $this->refundPayment($orderId);
+        $this->returnInventory($orderId);
+        $this->notifyCustomer($orderId, 'Seu pedido foi cancelado');
+        $this->logCancellation($orderId, $event->reason);
+    }
+}</code></pre>
+            </section>
+
+            <section>
+                <h3>Compensação em NestJS com RabbitMQ</h3>
+                <pre><code class="typescript" data-line-numbers="1,3,4,5,6|17,18,19,20|22,23,24,25,26,27">import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { Injectable } from '@nestjs/common';
+import { PaymentService } from '../services/payment.service';
+import { InventoryService } from '../services/inventory.service';
+import { NotificationService } from '../services/notification.service';
+import { LoggingService } from '../services/logging.service';
+
+@Injectable()
+export class OrderCancelledListener {
+  constructor(
+    private paymentService: PaymentService,
+    private inventoryService: InventoryService,
+    private notificationService: NotificationService,
+    private loggingService: LoggingService,
+  ) {}
+
+  @RabbitSubscribe({
+    exchange: 'order_exchange',
+    routingKey: 'order.cancelled',
+    queue: 'order-cancelled-queue',
+  })
+  async handleCancellation(msg: { orderId: number; reason: string }) {
+    // Compensação para cada etapa anterior (saga pattern)
+    await this.paymentService.refund(msg.orderId);
+    await this.inventoryService.restoreStock(msg.orderId);
+    await this.notificationService.notify(msg.orderId, 'Seu pedido foi cancelado');
+    await this.loggingService.logCancellation(msg.orderId, msg.reason);
+  }
+}</code></pre>
+            </section>
+
+            <section data-background-color="#ffffff">
+                <h3>Veja como o padrão Saga funciona</h3>
+                <img src="image-14.png" alt="Saga Pattern na prática" width="1000" style="max-height: 80vh;">
+                <p><small>Cada ação tem sua compensação correspondente</small></p>
+            </section>
+
+            <section>
+                <h2>Outro problema comum:</h2>
+                <h3>API de Cálculo de Frete Indisponível</h3>
+            </section>
+
+            <section>
+                <h3>Cenário:</h3>
+                <ul>
+                    <li>Cliente está finalizando uma compra</li>
+                    <li>API de frete dos Correios está fora do ar</li>
+                    <li>Se não calcularmos o frete, perdemos a venda</li>
+                </ul>
+                <p class="fragment">Como lidar com esse tipo de problema?</p>
+            </section>
+
+            <section data-background-color="#ffffff">
+                <img src="image-15.png" alt="API de Frete Indisponível" width="1000" style="max-height: 90vh;">
+            </section>
+
+            <section>
+                <h2>Como podemos resolver isso?</h2>
+            </section>
+
+            <section>
+                <h2>Cache + Valores Default</h2>
+                <p>Uma estratégia para lidar com serviços externos indisponíveis</p>
+            </section>
+
+            <section>
+                <h3>Implementação de Cache</h3>
+                <pre><code class="php" data-line-numbers="12,13,14,15,16,17,18|21,22,23|25,26|28,29|32,33,34,35,36,37,38,39|40,41,42,43,44,45">namespace App\Services;
+
+use App\Shipping\ShippingServiceClient;
+use Hyperf\CircuitBreaker\Annotation\CircuitBreaker;
+use Hyperf\Di\Annotation\Inject;
+                
+class GatewayService
+{
+    #[Inject]
+    private ShippingServiceClient $client;
+
+    #[CircuitBreaker
+    (
+        options: ['timeout' => 5000],
+        failCounter: 3,
+        successCounter: 1,
+        fallback: 'processCalculateShippingFallback'
+    )]
+    public function processCalculateShipping($order)
+    {
+        // Tenta calcular o frete usando a API externa
+        $shipping = $this->client
+            ->calculateShipping($order);
+        
+        // Salva o resultado em cache para uso futuro
+        $this->cacheShipping($order, $shipping);
+
+        // Retorna o resultado do cálculo
+        return $shipping;
+    }
+
+    // Método executado quando o circuito abre
+    public function processCalculateShippingFallback($order)
+    {
+        // Retorna um valor padrão ou cache com base no último cálculo
+        $cachedShipping = $this->getCachedShipping($order);
+        if ($cachedShipping) {
+            return $cachedShipping;
+        }
+        // Se não houver cache, retorna um valor padrão
+        return [
+            'price' => 40.00, // Valor fixo de frete
+            'deliveryTime' => '5-7 dias úteis', // Tempo de entrega padrão
+        ];
+    }
+}</code></pre>
+            </section>
+
+            <section data-background-color="#ffffff">
+                <h3>Resumindo o que aprendemos</h3>
+                <img src="image-16.png" alt="Fluxo completo com padrões de resiliência" width="1000" style="max-height: 80vh;">
+                <p><small>Um sistema resiliente combina múltiplas estratégias</small></p>
+            </section>
+
+            <section>
+                <h2>Outro problema comum:</h2>
+            </section>
+
+            <section>
+                <h2>Problema: Ataques ou Tráfego Excessivo</h2>
+                <h6>Endpoint de listagem de produtos sobrecarregado</h6>
+            </section>
+
+            <section>
+                <h3>Cenário normal: Poucos usuários</h3>
+                <p>Endpoint GET /products responde rapidamente para cada usuário</p>
+            </section>
+
+            <section data-background-color="#ffffff">
+                <img src="image-17.png" alt="Poucos usuários acessando a API" width="900" style="max-height: 80vh;">
+                <p><small>Recursos do servidor são suficientes para atender a todos</small></p>
+            </section>
+
+            <section>
+                <h3>Cenário problemático: Muitos usuários ou ataque</h3>
+                <ul>
+                    <li>Bots fazendo scraping da sua loja</li>
+                    <li>Ataque de negação de serviço (DDoS)</li>
+                    <li>Pico de tráfego em promoções</li>
+                </ul>
+            </section>
+
+            <section data-background-color="#ffffff">
+                <img src="image-18.png" alt="Muitos usuários sobrecarregando a API" width="900" style="max-height: 80vh;">
+                <p><small>O servidor fica sobrecarregado e ninguém consegue usar o sistema</small></p>
+            </section>
+
+            <section>
+                <h2>Solução: Rate Limiting</h2>
+                <p>Limita o número de requisições que um cliente pode fazer em um período de tempo</p>
+            </section>
+
+            <section>
+                <h3>Como funciona:</h3>
+                <ul>
+                    <li class="fragment">Define limites por IP, usuário ou token</li>
+                    <li class="fragment">Conta requisições em janelas de tempo</li>
+                    <li class="fragment">Rejeita requisições quando o limite é atingido</li>
+                    <li class="fragment">Retorna erro 429 (Too Many Requests)</li>
+                    <li class="fragment">Retorna conteúdo cacheado para requisições repetidas</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Implementação em NestJS</h3>
+                <pre><code class="typescript" data-line-numbers="1,2,3|6,7,8,9|11,12,13,14|20,21,22,23,24|26,27,28,29,30,31,32">import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
+import { RateLimiterRedis } from 'rate-limiter-flexible';
+
+@Injectable()
+export class RateLimiterMiddleware implements NestMiddleware {
+  private rateLimiter: RateLimiterRedis;
+  
+  constructor() {
+    // Configuração do rate limiter
+    this.rateLimiter = new RateLimiterRedis({
+      storeClient: redisClient,
+      points: 60, // Número de requisições permitidas
+      duration: 60, // Por minuto
+    });
+  }
+
+  async use(req: Request, res: Response, next: NextFunction) {
+    try {
+      // Usa o IP como identificador
+      const key = req.ip;
+      await this.rateLimiter.consume(key);
+      next();
+    } catch (error) {
+      // Limite excedido
+      const retryAfter = Math.round(error.msBeforeNext / 1000) || 1;
+      
+      res.set('Retry-After', String(retryAfter));
+      res.status(429).json({
+        error: 'Muitas requisições, tente novamente mais tarde',
+        retryAfter
+      });
+    }
+  }
+}</code></pre>
+            </section>
+
+            <section>
+                <h3>Benefícios do Rate Limiting</h3>
+                <ul>
+                    <li>Protege contra ataques de força bruta</li>
+                    <li>Evita que um único cliente monopolize recursos</li>
+                    <li>Mantém o sistema disponível para todos os usuários</li>
+                    <li>Reduz custos de infraestrutura</li>
+                </ul>
+                <p class="fragment"><em>Equilibra as cargas para um serviço mais justo</em></p>
+            </section>
+
+            <section>
+                <h2>Mas e para adicionar novos serviços?</h2>
+                <p>Como expandir nosso sistema sem quebrar o que já funciona?</p>
+            </section>
+
+            <section>
+                <h2>Open/Closed Principle</h2>
+                <p>Princípio Aberto/Fechado do SOLID</p>
+                <blockquote>
+                    "Entidades de software devem estar abertas para extensão, mas fechadas para modificação."
+                </blockquote>
+                <p class="fragment">Em outras palavras: adicione comportamentos sem mexer no código existente</p>
+            </section>
+
+            <section>
+                <h3>Exemplo: Múltiplos provedores de frete</h3>
+                <p>E se quisermos adicionar novos provedores além dos Correios?</p>
+            </section>
+
+            <section>
+                <h3>Interface e implementações</h3>
+                <pre><code class="php" data-line-numbers="1-10|13-23|29-39|45-53">// Interface comum para todos os provedores de frete
+interface ShippingProviderInterface
+{
+    /**
+     * Calcula o frete para um pedido
+     */
+    public function calculateShipping(array $order): array;
+    public function trackShipment(string $trackingCode): array;
+    public function getName(): string;
+}
+
+// Implementação para os Correios (já existente)
+class CorreiosShippingProvider implements ShippingProviderInterface
+{
+    public function calculateShipping(array $order): array
+    {
+        // Lógica específica dos Correios
+        return [
+            'price' => 35.90,
+            'delivery_time' => '3-5 dias úteis',
+            'provider' => 'Correios'
+        ];
+    }
+    
+    // Outras implementações de métodos...
+}
+
+// Nova implementação para transportadora sem modificar código existente
+class FastShippingProvider implements ShippingProviderInterface
+{
+    public function calculateShipping(array $order): array
+    {
+        // Lógica específica da transportadora privada
+        return [
+            'price' => 45.90,
+            'delivery_time' => '1-2 dias úteis',
+            'provider' => 'FastShipping'
+        ];
+    }
+    
+    // Outras implementações de métodos...
+}
+
+// Factory que seleciona o provedor apropriado
+class ShippingProviderFactory
+{
+    private array $providers = [];
+    
+    public function registerProvider(ShippingProviderInterface $provider): void
+    {
+        $this->providers[$provider->getName()] = $provider;
+    }
+    
+    public function getProvider(string $name): ?ShippingProviderInterface
+    {
+        return $this->providers[$name] ?? null;
+    }
+    
+    public function getAllProviders(): array
+    {
+        return $this->providers;
+    }
+}</code></pre>
+            </section>
+
+            <section>
+                <h3>Utilizando a factory</h3>
+                <pre><code class="php" data-line-numbers="2|3-8|10-12|14-22">// Configuração da aplicação
+$factory = new ShippingProviderFactory();
+
+// Registramos todos os provedores disponíveis
+$factory->registerProvider(new CorreiosShippingProvider());
+$factory->registerProvider(new FastShippingProvider());
+// Podemos adicionar novos provedores aqui sem modificar o código existente
+$factory->registerProvider(new InternationalShippingProvider());
+
+// Cliente escolhe qual provedor usar
+$providerName = $_POST['shipping_provider'] ?? 'Correios';
+$provider = $factory->getProvider($providerName);
+
+// Calculamos o frete usando o provedor escolhido
+if ($provider) {
+    return $provider->calculateShipping($order);
+}
+
+return [
+    'error' => 'Provedor de frete não encontrado',
+    'available_providers' => $factory->getAllProviders()
+];
+</code></pre>
+            </section>
+
+            <section>
+                <h3>Benefícios do Open/Closed Principle</h3>
+                <ul>
+                    <li>Código mais estável e menos propenso a bugs</li>
+                    <li>Podemos adicionar novos provedores sem risco</li>
+                    <li>Testes existentes continuam válidos</li>
+                    <li>Facilita a manutenção e a extensão do sistema</li>
+                </ul>
+                <p class="fragment">Aplicando SOLID, ganhamos resiliência e flexibilidade.</p>
+            </section>
+
+            <section>
+                <h1>Recapitulando</h1>
+                <p>Quais padrões de resiliência vimos hoje?</p>
+            </section>
+
+            <section>
+                <h2>Retry</h2>
+                <p class="fragment">Tentar novamente após uma falha, aumentando gradualmente o tempo de espera entre tentativas.</p>
+            </section>
+
+            <section>
+                <h2>Circuit Breaker</h2>
+                <p class="fragment">Interromper chamadas a serviços com falhas persistentes, prevenindo sobrecarga e permitindo recuperação gradual.</p>
+            </section>
+
+            <section>
+                <h2>Fallbacks</h2>
+                <p class="fragment">Planos B para quando algo falha, oferecendo alternativas em vez de deixar a operação falhar completamente.</p>
+            </section>
+
+            <section>
+                <h2>Saga Pattern</h2>
+                <p class="fragment">Gerenciar transações distribuídas em sistemas complexos, com compensações para desfazer operações em caso de falha.</p>
+            </section>
+
+            <section>
+                <h2>Cache + Valores Default</h2>
+                <p class="fragment">Armazenar resultados de operações para uso quando serviços externos estiverem indisponíveis, melhorando disponibilidade.</p>
+            </section>
+
+            <section>
+                <h2>Rate Limiting</h2>
+                <p class="fragment">Limitar o número de requisições que um cliente pode fazer em um período, protegendo contra abusos e distribuindo recursos de forma justa.</p>
+            </section>
+
+            <section>
+                <h2>Open/Closed Principle</h2>
+                <p class="fragment">Adicionar novos comportamentos sem modificar o código existente, aumentando a flexibilidade e reduzindo riscos.</p>
+            </section>
+
+            <section>
+                <h2>Próximos passos</h2>
+                <ul>
+                    <li>Estude mais sobre padrões de resiliência</li>
+                    <li>Implemente esses conceitos em seus projetos</li>
+                    <li>Participe de comunidades e compartilhe experiências</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Conclusão</h2>
+                <ul>
+                    <li>Falhas são inevitáveis</li>
+                    <li>Sistemas resilientes prevêm e se adaptam a falhas</li>
+                    <li>Combine diferentes padrões para maior robustez</li>
+                    <li>A resiliência deve ser parte do design inicial</li>
+                </ul>
+                <p class="fragment"><strong>Projete para falhar!</strong></p>
+            </section>
+            <section>
+                <h2>Obrigado!</h2>
+                <p>Luiz Schons</p>
+                <p><small>Senior Software Architect</small></p>
+                <div style="display: flex; align-items: center; justify-content: center; margin-top: 20px;">
+                    <div style="text-align: center;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://www.linkedin.com/in/luiz-schons/" alt="LinkedIn QR Code" style="border: 1px solid #ccc; border-radius: 5px;">
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Scripts do Reveal.js e plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.5.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.5.0/styles/atom-one-dark.min.css">
+    
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            plugins: [ RevealHighlight ]
+        });
+        
+        // Highlight manual para códigos
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+        });
+    </script>
+</body>
+</html>
